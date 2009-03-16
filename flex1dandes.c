@@ -1,6 +1,4 @@
-#ifdef HAVE_MALLOC_H
-# include<malloc.h>
-#endif
+#include<malloc.h>
 #include<math.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -131,10 +129,10 @@ main()
      fp1=fopen("load1dandes","r");
      fp2=fopen("load1ddeflect50","w");
      lattice_size_x=4096;
-     deltax=0.52;
+     deltax=0.52; /* km */
      L=deltax*2*lattice_size_x;
-     alpha=50.0;  /* (D/(rho_c*g))^0.25 */
-     delrho=0.27; /* (rho_m-rho_c)/rho_m */
+     alpha=50.0;  /* (4D/((rho_m-rho_c)*g))^0.25, in units of km */
+     delrho=0.27; /* (rho_m-rho_c)/rho_c */
      w=vector(1,2*lattice_size_x);
      for (i=1;i<=2*lattice_size_x;i++) 
       {if (i<lattice_size_x/2) fscanf(fp1,"%f %f",&w[i],&dum);
@@ -143,10 +141,10 @@ main()
      realft(w,2*lattice_size_x,1);
      w[1]=w[1]/delrho;
      k=PI/deltax;
-     w[2]*=1/(delrho+pow(k*alpha,4.0));
+     w[2]*=1/(delrho+4*delrho*pow(k*alpha,4.0));
      for (i=3;i<=2*lattice_size_x;i++) 
       {k=((i-1)/2)*PI/L;
-       w[i]*=1/(delrho+pow(k*alpha,4.0));}
+       w[i]*=1/(delrho+4*delrho*pow(k*alpha,4.0));}
      realft(w,2*lattice_size_x,-1);
      for (i=1;i<=2*lattice_size_x;i++)
       fprintf(fp2,"%f %f\n",i*deltax,w[i]/(lattice_size_x));
