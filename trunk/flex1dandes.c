@@ -1,4 +1,6 @@
-#include<malloc.h>
+#ifdef HAVE_MALLOC_H
+# include<malloc.h>
+#endif
 #include<math.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -121,6 +123,7 @@ void realft(float data[], unsigned long n, int isign)
 	}
 }
 
+int
 main()
 {    float deltax,alpha,*w,dum,delrho,L,k;
      int lattice_size_x,i; 
